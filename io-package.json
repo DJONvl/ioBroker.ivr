@@ -1,0 +1,222 @@
+{
+    "common": {
+        "name":                     "ivr",
+        "version":                  "0.5.0",
+        "title":                    "ivr adapter",
+        "desc":                     {
+ 			             "en": "ioBroker ivr Adapter",
+ 			             "de": "ioBroker Ivr Adapter",
+ 			             "ru": "ioBroker Ivr драйвер как образец"
+	},
+        "platform":                 "Javascript/Node.js",
+		"localLink":    "%web_protocol%://%ip%:%web_port%/ivr/edit.html",
+        "mode":                     "daemon",
+        "icon":                     "ivr.png",
+        "enabled":                  true,
+	"extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.ivr/master/admin/ivr.png",
+	"keywords":                 ["ivr", "vis", "GUI", "graphical", "scada"],
+        "readme":                   "https://github.com/ioBroker/ioBroker.ivr/blob/master/README.md",
+	"loglevel":                 "info",
+        "type":                     "common adapters",
+        "restartAdapters":          ["vis"]
+    },
+     "native": {
+    "setup": {
+      "VCvar": "ivr.0.VoiceVar",
+      "TTSe": "sayit.0.tts.text"
+    },
+    "units": {
+      "Включить": [
+        {
+          "id": "1",
+          "parent": "",
+          "caption": "включить",
+          "triger": "вкл|выкл",
+          "respond": "ок",
+          "s_var": "",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "6",
+          "parent": "1",
+          "caption": "зал",
+          "triger": "зал",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "12",
+          "parent": "6",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "javascript.0.light.1",
+          "wtriger": "1,6,12"
+        },
+        {
+          "id": "14",
+          "parent": "6",
+          "caption": "телевизор",
+          "triger": "телевизор",
+          "respond": "включаю телевизор в зале",
+          "s_var": "s_var",
+          "wtriger": "1,6,14"
+        },
+        {
+          "id": "16",
+          "parent": "14",
+          "caption": "канал",
+          "triger": "канал",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "6,14,16"
+        },
+        {
+          "id": "7",
+          "parent": "1",
+          "caption": "спальная",
+          "triger": "спаль",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "13",
+          "parent": "7",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "javascript.0.light.1",
+          "wtriger": "1,7,13"
+        },
+        {
+          "id": "3",
+          "parent": "1",
+          "caption": "коридор",
+          "triger": "корид",
+          "respond": "",
+          "s_var": "",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "9",
+          "parent": "3",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "1,3,9"
+        },
+        {
+          "id": "4",
+          "parent": "1",
+          "caption": "кухня",
+          "triger": "кухн",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "10",
+          "parent": "4",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "javascript.0.light.3",
+          "wtriger": "1,4,10"
+        },
+        {
+          "id": "17",
+          "parent": "4",
+          "caption": "вытяжка",
+          "triger": "вытяжк",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "1,4,17"
+        },
+        {
+          "id": "5",
+          "parent": "1",
+          "caption": "детская",
+          "triger": "детс",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "11",
+          "parent": "5",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "1,5,11"
+        },
+        {
+          "id": "2",
+          "parent": "1",
+          "caption": "Ванная",
+          "triger": "ванной",
+          "respond": "",
+          "s_var": "",
+          "wtriger": "undefined"
+        },
+        {
+          "id": "8",
+          "parent": "2",
+          "caption": "свет",
+          "triger": "свет",
+          "respond": "respond",
+          "s_var": "javascript.0.light.2",
+          "wtriger": "1,2,8"
+        },
+        {
+          "id": "15",
+          "parent": "2",
+          "caption": "вытяжка",
+          "triger": "вытяжк",
+          "respond": "respond",
+          "s_var": "s_var",
+          "wtriger": "undefined"
+        }
+      ],
+      "Скажи": [
+        {
+          "id": "1",
+          "parent": "",
+          "caption": "Скажи",
+          "triger": "",
+          "respond": "ок",
+          "s_var": "ivrx.0.testVariable",
+          "wtriger": "undefined"
+        }
+      ],
+      "new": [
+        {
+          "id": "1",
+          "parent": "",
+          "caption": "тест",
+          "triger": "",
+          "respond": "ок",
+          "s_var": "ivrx.0.testVariable",
+          "wtriger": "undefined"
+        }
+      ],
+      "new1": [
+        {
+          "id": "1",
+          "parent": "",
+          "caption": "тест",
+          "triger": "",
+          "respond": "ок",
+          "s_var": "ivrx.0.testVariable",
+          "wtriger": "undefined"
+        }
+      ]
+    }
+  },
+    "objects": [
+
+    ]
+}

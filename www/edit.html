@@ -1,0 +1,574 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <script type="text/javascript" src="/lib/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/lib/js/jquery-ui-1.10.3.full.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/lib/css/themes/jquery-ui/redmond/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="/lib/css/fancytree/ui.fancytree.min.css"/>
+    <script type="text/javascript" src="/lib/js/jquery.fancytree-all.min.js"></script>
+    <script type="text/javascript" src="/lib/js/translate.js"></script>
+    <script type="text/javascript" src="/lib/js/socket.io.js"></script>
+    <script type="text/javascript" src="/_socket/info.js"></script>
+    <script type="text/javascript" src="/lib/js/selectID.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/jquery.jOrgChart.css"/>
+    <link rel="stylesheet" href="css/custom.css"/>
+    <script src="js/jquery.jOrgChart.js"></script>
+    <script type="text/javascript" src="js/taffy.js"></script>
+
+
+    <script type="text/javascript" src="js/conn.js"></script>
+    <style type="text/css">
+        .box {
+            float: right;
+            background: red;
+            border: 2px solid #000000;
+            border-radius: 2px;
+            width: 100%;
+        }
+
+        .list-setup {
+            float: center;
+            background: red;
+            border: 2px solid #000000;
+            border-radius: 2px;
+            width: 100%;
+        }
+
+        ul#upload-chart {
+            float: right;
+            list-style: none outside none;
+        }
+
+        ul#upload-chart li {
+            background: none repeat scroll 0 0 #ECDC20;
+            border: 1px solid #808080;
+            border-radius: 2px;
+            height: 44px;
+            margin-top: 2px;
+            padding-top: 5px;
+            width: 200px;
+            z-index: 100;
+        }
+
+        #fancy_edit,
+        #fancy_add {
+            position: fixed;
+            top: 100px;
+            width: 500px;
+            background: black;
+            right: 0;
+            left: 0;
+            margin: auto;
+            padding: 20px;
+            border: 3px solid white;
+            z-index: 35;
+        }
+
+        .list_units {
+            position: absolute;
+            z-index: 3;
+            right: 10px;
+            top: 60;
+            width: 150px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .list_units_mnu {
+            position: absolute;
+            z-index: 33;
+            right: 10px;
+            top: 50;
+            width: 160px;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        #fancy_edit i,
+        #fancy_add i {
+            position: absolute;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            right: 0;
+            color: #000;
+            background: gray;
+            opacity: 1;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="box">
+ <input type="button" value="Click to Speak" onclick="recognition.start()">
+ <input type="search" id="q" name="q" size=80>	
+ <input type="button" value="send" onclick="sendcmd()"> 
+ 
+ 
+        <div class="pull-right">
+            <div class="alert-message info" id="show-list">Show list.</div>
+        </div>
+        <div class="pull-right" id="contjson">
+            <!-- 			<div class="alert-message info" id="getjson" onclick="makeArrays()">Save</div>		 -->
+        </div>
+        <div class="pull-right">
+            <div class="alert-message info" id="show-list_1">Show setup</div>
+        </div>
+    </div>
+
+</div>
+<!--  list unit		 -->
+<div class="list_units_mnu">
+
+    <div id="list-unit" class="list_units"></div>
+</div>
+
+<div id="dialog" title="Диалоговое окно">
+		<!--  setup		 -->
+	
+			<table border="2" >
+				<tr>
+					<td><input id="ids_p0" class="value" type="text"/></td>
+					<td><a style="cursor: pointer" id="p0" data-ids="0">VCvar<a></td>
+				</tr>
+				<tr>
+					<td><input id="ids_p1" class="value" type="text"/></td>
+					<td><a style="cursor: pointer" id="p1" data-ids="0">TTSe<a></td>
+				</tr>
+				<tr>
+					<td align="right">
+					<input id="Save_setup" class="value" type="button" value="Save" onclick="save_setup()"/>
+					</td>
+					<td>
+					<input id="cancel_setup" class="value" type="button" value="Cancel"
+							   onclick="$('#show-list_1').click()"/>
+					</td>
+				</tr>
+			</table>
+		
+</div>
+
+<div id="chart" class="orgChart"></div>
+
+<!-- Add Node box -->
+<div id="fancy_add" style="display:none">
+    <h1 class="title_lb">New Node</h1>
+    <div class="span12" id="add_nodo">
+
+        <input type="text" name="node_name" id="new_node_name"/>
+        <input type="text" name="title_name" id="new_node_title"/>
+        <div class="span12">
+            <button id="add_node" class="aqua_btn span3">Add</button>
+        </div>
+    </div>
+    <i class="close">X</i>
+</div>
+<!-- Edit node box -->
+<div id="fancy_edit" style="display:none">
+
+    <h1 class="title_lb">Edit Node</h1>
+    <i class="close">X</i>
+    <div id="edit_nodo">
+
+
+        <table class="aqua_btn span3">
+            <tr>
+                <td>Caption</td>
+                <td><input type="text" name="caption" id="edit_node_name"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Triger</td>
+                <td><input type="text" name="triger" id="edit_node_title"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Respond</td>
+                <td><input type="text" name="respond" id="edit_node_Respond"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Set Var</td>
+                <td><input class="value" name="s_var" type="text" id="ids_p2"></td>
+                <td><a style="background-color: white;" id="p2" data-ids="0"> Sel <a></td>
+            </tr>
+            <tr>
+                <td>wtriger</td>
+                <td><input type="text" name="wtriger" id="edit_node_wtriger"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ToDo</td>
+                <td><input type="text" name="todo" id="2edit_node_title"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ToDo</td>
+                <td><input type="text" name="todo" id="3edit_node_title"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ToDo</td>
+                <td><input type="text" name="todo" id="4edit_node_title"></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="span12">
+            <button id="edit_node" class="aqua_btn span3">Edit</button>
+        </div>
+
+
+    </div>
+
+
+</div>
+<div id="dialog-select-member" style="display:none"></div>
+<script>
+    
+$(function() {
+	
+ $('#dialog').dialog({
+		title: 'Setup',
+		autoOpen: false
+	});
+});
+
+
+	var node_to_edit;
+    socket = io.connect();
+
+    socket.on('message', function (msg) {
+
+        alert(msg);
+    });
+
+
+    function loadjson(arr) {
+        //var z=new Object();
+        //подгружаем настройки
+        var items = [];
+        var data = TAFFY(arr);
+
+        data({
+            "parent": ""
+        }).each(function (record, recordnumber) {
+            loops(record);
+        });
+
+        //start loop the json and form the html
+
+        function loops(root) {
+            var htmx = "<span class='label_node'><a>" + root.caption + "</a></br><i>" + root.triger + "</i></span>" +
+                    "<div class='details'>" +
+                    "<p>" + root.id + "</p>" +
+                    "<p>" + root.parent + "</p>" +
+                    "<p>" + root.caption + "</p>" +
+                    "<p>" + root.triger + "</p>" +
+                    "<p>" + root.respond + "</p>" +
+                    "<p>" + root.s_var + "</p>" +
+                    "<p>" + root.wtriger + "</p>" +
+                    "</div>";
+
+            if (root.parent == "") {
+                items.push("<li class='unic" + root.id + " root' id='" + root.caption + "'>" +
+                        htmx);
+            } else {
+                items.push("<li class='child unic" + root.id + "' id='" + root.caption + "'>" +
+                        htmx);
+            }
+
+            var c = data({"parent": root.id}).count();
+
+            if (c != 0) {
+                items.push("<ul>");
+                data({"parent": root.id}).each(function (record, recordnumber) {
+                    loops(record);
+                });
+                items.push("</ul></li>");
+            } else {
+                items.push("</li>");
+            }
+        } // End the generate html code
+
+
+        $("#org").html(items.join(""));
+
+
+        init_tree()
+    }
+    // End Load HTML
+
+    function init_tree() {
+        var opts = {
+            chartElement: '#chart',
+            dragAndDrop: true,
+            expand: true,
+            control: true,
+            rowcolor: false
+        };
+        $("#chart").html("");
+        $("#org").jOrgChart(opts);
+    }
+
+    function scroll() {
+        $(".node").click(function () {
+            $("#chart").scrollTop(0)
+            $("#chart").scrollTop($(this).offset().top - 140);
+        })
+    }
+
+
+    function makeArrays(nm) {
+        var hierarchy = [];
+        var jscont = [];
+        $("#org li").each(function () {
+
+            var container = $(this).children("div").children("p");
+            var unit = new Object();
+            unit.id = container[0].innerHTML;
+            unit.parent = container[1].innerHTML;
+            unit.caption = container[2].innerHTML;
+            unit.triger = container[3].innerHTML;
+            unit.respond = container[4].innerHTML;
+            unit.s_var = container[5].innerHTML;
+            unit.wtriger = container[6].innerHTML;
+            jscont.push(unit);
+
+        });
+        console.log(JSON.stringify(jscont))
+
+        socket.emit('getObject', 'system.adapter.ivr.0', function (err, obj) {
+            obj.native.units[nm] = jscont;
+            socket.emit('setObject', obj._id, obj);
+        });
+    }
+
+    var z = [];
+    loadjsonio();
+    $(document).ready(function () {
+
+        //forms behavior
+        $("#new_node_name, #edit_node_name").on("keyup", function (evt) {
+            var id = $(this).attr("id");
+            if ($(this).val() != '') {
+                if (id == "new_node_name") {
+                    $("#add_node").show();
+                } else {
+                    $("#edit_node").show();
+                }
+            } else {
+                if (id == "new_node_name") {
+                    $("#add_node").hide();
+                } else {
+                    $("#edit_node").hide();
+                }
+            }
+        });
+        scroll()
+    });
+    function loadunit(name) {
+        socket.emit('getObject', 'system.adapter.ivr.0', function (err, obj) {
+            loadjson(obj.native.units[name]);
+            $("#contjson").html('<div class="alert-message info" id="getjson" onclick="makeArrays(\'' + name + '\')">Save</div>')
+ 
+
+        });
+
+    }
+    function loadjsonio() {
+        socket.emit('getObject', 'system.adapter.ivr.0', function (err, obj) {
+
+            $("input#ids_p0").val(obj.native.setup.VCvar);
+            $("input#ids_p1").val(obj.native.setup.TTSe);
+            z = obj.native.units.test1;
+            var htmx = "";
+            $.each(obj.native.units, function (name) {
+                htmx += '<div onclick="loadunit(\'' + name + '\');" class="alert-message info">' + name + '</div>';
+
+            });
+            $('div.list_units').html(htmx)
+            loadjson(z);
+
+        });
+    }
+    function marknode(m_arr) {
+//init_tree();
+        if (m_arr === undefined || m_arr === null) {
+            // do something
+			init_tree();
+        }
+        else {
+            var num = m_arr.split(',');
+//loadunit(num[0]);
+//init_tree();
+
+
+            for (var i = 1; i < num.length; i++) {
+                if (num[i] == 1) {
+                    $("div.node.unic1.root.ui-draggable.ui-droppable").addClass("sel");
+                }
+
+                $("div.node.child.unic" + num[i] + ".ui-draggable.ui-droppable").addClass("sel");
+            }
+
+        }
+    }
+
+
+    function save_setup() {
+        socket.emit('getObject', 'system.adapter.ivr.0', function (err, obj) {
+            var x = $("input#ids_p0").val();
+            obj.native.setup.VCvar = $("input#ids_p0").val();
+            obj.native.setup.TTSe = $("input#ids_p1").val();
+            socket.emit('setObject', obj._id, obj);
+        });
+    }
+
+    $('#dialog-select-member').selectId('init', {
+        filter: {common: {history: {enabled: true}}},
+        noMultiselect: true,
+        connCfg: {
+            socketUrl: socketUrl,
+            socketSession: socketSession,
+            socketName: 'ivrEdit',
+            upgrade: typeof socketForceWebSockets !== 'undefined' ? !socketForceWebSockets : undefined,
+            rememberUpgrade: typeof socketForceWebSockets !== 'undefined' ? socketForceWebSockets : undefined,
+            transports: typeof socketForceWebSockets !== 'undefined' ? (socketForceWebSockets ? ['websocket'] : undefined) : undefined
+        },
+        columns: ['name', 'role', 'room', 'value'],
+        texts: {
+            select: _('Select'), cancel: _('Cancel'),
+            all: _('All'), id: _('ID'),
+            name: _('Name'), role: _('Role'),
+            room: _('Room'), value: _('Value'),
+            selectid: _('Select ID'), from: _('From'),
+            lc: _('Last changed'), ts: _('Time stamp'),
+            wait: _('Processing...'), ack: _('Acknowledged')
+        },
+    });
+
+    $("a").click(function () {
+        var id = $(this).attr("id");
+        $('#dialog-select-member').selectId('show', $('#ids_' + id).val(), undefined, function (newId) {
+            $('#ids_' + id).val(newId).trigger('change');
+        });
+
+    });
+    $("#units_test1").click(function () {
+        var id = $(this).val();
+
+    });
+    /* Show/hide */
+    $("#show-list_1").click(function (e) {
+        e.preventDefault();
+        $('#dialog').toggle('fast', function () {
+            if ($(this).is(':visible')) {
+
+			$('#dialog').dialog("close");	
+            } else {
+			$('#dialog').dialog("open");
+ 
+            }
+        });
+    });
+
+    $("#show-list").click(function (e) {
+        e.preventDefault();
+        $('#list-unit').toggle('fast', function () {
+            if ($(this).is(':visible')) {
+                $(".topbar").fadeTo('fast', 0.9);
+            } else {
+                $(".topbar").fadeTo('fast', 1);
+            }
+        });
+    });
+	
+	
+	
+	
+    function testio(actualValue) {
+        sendTo(null, 'message', null, function (list) {
+            var text = '<option value="">' + _('Select port') + '</option>';
+            for (var j = 0; j < list.length; j++) {
+              }
+           
+        });
+    }
+    //-----------------------------------------------------------------------------
+    servConn.namespace = 'ivr.0';
+    servConn._useStorage = false;
+    var states = [];
+
+	
+	var socketUrl = ":8082"; var socketSession = "";
+    servConn.init({
+        name: 'ivr.0',  // optional - default 'vis.0'
+        connLink: socketUrl,  // optional URL of the socket.io adapter
+        socketSession: ''           // optional - used by authentication
+    }, {
+        onConnChange: function (isConnected) {
+            if (isConnected) {
+                console.log('connected');
+                servConn.getStates(function (err, _states) {
+                    var count = 0;
+                    for (var id in _states) {
+                        count++;
+                    }
+                    console.log('Received ' + count + ' states.');
+                    states = _states;
+                });
+            } else {
+                console.log('disconnected');
+            }
+        },
+        onRefresh: function () {
+            window.location.reload();
+        },
+        onUpdate: function (id, state) {
+            setTimeout(function () {
+                if (id === 'ivr.0.ValArr') {
+                    console.log('NEW VALUE of ' + id + ': ' + JSON.stringify(state));
+                    states[id] = state;
+                    marknode(state.val);
+                }
+            }, 0);
+
+        },
+        onError: function (err) {
+            window.alert(_('Cannot execute %s for %s, because of insufficient permissions', err.command, err.arg), _('Insufficient permissions'), 'alert', 600);
+        }
+    });
+	
+	
+var xhttp = new XMLHttpRequest();
+
+function sendcmd(){
+xhttp.open("GET", "http://localhost:8087/set/ivr.0.VoiceVar?value=" + q.value, true);
+xhttp.send();
+}
+
+var recognition = new webkitSpeechRecognition();
+recognition.onresult = function(event) {
+if (event.results.length > 0) {
+q.value = event.results[0][0].transcript;
+xhttp.open("GET", "http://localhost:8087/set/ivr.0.VoiceVar?value=" + q.value, true);
+xhttp.send();	
+}
+}
+</script>
+
+<ul id="org" style="float: right; display: none;"></ul>
+</body>
+
+</html>
