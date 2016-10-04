@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "ivr",
-        "version":                  "0.5.0",
+        "version":                  "0.0.0",
         "title":                    "ivr adapter",
         "desc":                     {
  			             "en": "ioBroker ivr Adapter",
@@ -13,9 +13,9 @@
         "mode":                     "daemon",
         "icon":                     "ivr.png",
         "enabled":                  true,
-	"extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.ivr/master/admin/ivr.png",
+	"extIcon":                  "https://raw.githubusercontent.com/DJONvl/ioBroker.ivr/master/admin/ivr.png",
 	"keywords":                 ["ivr", "vis", "GUI", "graphical", "scada"],
-        "readme":                   "https://github.com/ioBroker/ioBroker.ivr/blob/master/README.md",
+        "readme":                   "https://github.com/DJONvl/ioBroker.ivr/blob/master/README.md",
 	"loglevel":                 "info",
         "type":                     "common adapters",
         "restartAdapters":          ["vis"]
