@@ -555,7 +555,7 @@ $(function() {
 var xhttp = new XMLHttpRequest();
 
 function sendcmd(){
-xhttp.open("GET", "http://localhost:8087/set/ivr.0.VoiceVar?value=" + q.value, true);
+xhttp.open("GET", "http://"+window.location.hostname+":8087/set/ivr.0.VoiceVar?value=" + q.value, true);
 xhttp.send();
 }
 
@@ -563,7 +563,7 @@ var recognition = new webkitSpeechRecognition();
 recognition.onresult = function(event) {
 if (event.results.length > 0) {
 q.value = event.results[0][0].transcript;
-xhttp.open("GET", "http://localhost:8087/set/ivr.0.VoiceVar?value=" + q.value, true);
+xhttp.open("GET", "http://"+window.location.hostname+":8087/set/ivr.0.VoiceVar?value=" + q.value, true);
 xhttp.send();	
 }
 }
