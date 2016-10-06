@@ -162,8 +162,7 @@ adapter.on('stateChange', function (id, state) {
 });
 function testArr(a, b) {
     if (a == 'undefined' || b == '' || b == 'undefined' || a == '')return false;
-    if (a.length < b.length) {//b = [a, a = b][0];
-  return false;
+    if (a.length > b.length) {b = [a, a = b][0];
 	} //swap  
 
     for (var i = 0, length = a.length; i < length; i++) {
