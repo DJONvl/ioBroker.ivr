@@ -112,7 +112,9 @@ adapter.on('stateChange', function (id, state) {
 						var sintrig = z[key][prop].triger.split('|');//синонимы
 
 								sintrig.forEach(function (sinitem, x) {
-											if (item.includes(sinitem)) {//добавить номер юнита если  в слове есть вхождение синонима
+											//добавить номер юнита если  в слове есть вхождение синонима
+											if (item.indexOf(sinitem) !=-1) {
+											//if (item.includes(sinitem)) {
 												untrignum.push(z[key][prop].id);
 											adapter.log.info('к слову |'+item+'| тригер |'+sinitem+" id=" + z[key][prop].id);	
 									}
@@ -126,10 +128,13 @@ adapter.on('stateChange', function (id, state) {
                 txts += key + ',';
 
                 var val;//todo перенести в юнит
-                if (lower.includes("вклю")) {
+                if (lower.indexOf("вклю") !=-1) {
+				//if (lower.includes("вклю")) {
                     val = 1;
                 }
-                if (lower.includes("выклю")) {
+                
+		        if (lower.indexOf("выклю") !=-1) {		
+				//if (lower.includes("выклю")) {
                     val = 0;
                 }
 
