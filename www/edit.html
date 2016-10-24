@@ -54,25 +54,9 @@
             z-index: 100;
         }
 
-        #fancy_edit,
-        #fancy_add {
-            position: fixed;
-            top: 100px;
-            width: 500px;
-            background: black;
-            right: 0;
-            left: 0;
-            margin: auto;
-            padding: 20px;
-            border: 3px solid white;
-            z-index: 35;
-        }
-
         .list_units {
             position: absolute;
             z-index: 3;
-
-
             width: 150px;
             cursor: pointer;
             border: 2px solid white;
@@ -88,20 +72,7 @@
             border: 1px solid black;
         }
 
-        #fancy_edit i,
-        #fancy_add i {
-            position: absolute;
-            top: 0;
-            width: 15px;
-            height: 15px;
-            right: 0;
-            color: #000;
-            background: gray;
-            opacity: 1;
-            font-size: 15px;
-            cursor: pointer;
-            padding: 5px;
-        }
+
     </style>
 
 </head>
@@ -133,7 +104,7 @@
     <div id="list-unit" class="list_units"></div>
 </div>
 
-<div id="dialog" title="Диалоговое окно">
+<div id="dialog" style="display:none">
 		<!--  setup		 -->
 	
 			<table border="2" >
@@ -172,13 +143,13 @@
             <button id="add_node" class="aqua_btn span3">Add</button>
         </div>
     </div>
-    <i class="close">X</i>
+
 </div>
 <!-- Edit node box -->
 <div id="fancy_edit" style="display:none">
 
     <h1 class="title_lb">Edit Node</h1>
-    <i class="close">X</i>
+
     <div id="edit_nodo">
 
 
@@ -242,7 +213,27 @@ $(function() {
  $('#dialog').dialog({
 		title: 'Setup',
 		autoOpen: false
+		
 	});
+	
+	
+ $('#fancy_edit').dialog({
+		title: 'Edit',
+		autoOpen: false,
+		 width:800
+		 
+	});
+		
+ $('#fancy_add').dialog({
+		title: 'Add',
+		autoOpen: false,
+		 width:800
+		 
+	});
+			
+	
+	
+	
 });
 
 
@@ -356,22 +347,22 @@ $(function() {
     $(document).ready(function () {
 
         //forms behavior
-        $("#new_node_name, #edit_node_name").on("keyup", function (evt) {
-            var id = $(this).attr("id");
-            if ($(this).val() != '') {
-                if (id == "new_node_name") {
-                    $("#add_node").show();
-                } else {
-                    $("#edit_node").show();
-                }
-            } else {
-                if (id == "new_node_name") {
-                    $("#add_node").hide();
-                } else {
-                    $("#edit_node").hide();
-                }
-            }
-        });
+//        $("#new_node_name, #edit_node_name").on("keyup", function (evt) {
+//            var id = $(this).attr("id");
+//            if ($(this).val() != '') {
+//                if (id == "new_node_name") {
+//                    $("#add_node").show();
+//                } else {
+ //                   $("#edit_node").show();
+ //               }
+//            } else {
+//                if (id == "new_node_name") {
+//                    $("#add_node").hide();
+//                } else {
+//                    $("#edit_node").hide();
+ //               }
+//            }
+//        });
         scroll()
     });
     function loadunit(name) {

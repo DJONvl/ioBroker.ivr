@@ -433,14 +433,16 @@
                 hideBox();
                 jOrgChart_init();
             });
-            $("#fancy_edit").show();
+           // $("#fancy_edit").show();
+			$('#fancy_edit').dialog("open");
         });
 
 
         //Add Node
 
         $(jOrgChart_user_config_options.chartElement).find(".add").off("click").on("click", function() {
-            $("#fancy_add i").show();
+            //$("#fancy_add i").show();
+			$('#fancy_add').dialog("open");
             var classList = $(this).parent().parent().attr('class').split(/\s+/);
             var add_to_node;
             $.each(classList, function(index, item) {
